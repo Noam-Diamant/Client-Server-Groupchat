@@ -5,7 +5,7 @@ import time
 # Import the necessary modules.
 
 HOST_IP = '127.0.0.1'
-PORT = 7026
+PORT = 7030
 ENCODING_METHOD = 'utf-8'
 # Define constants for the server's host IP, port, and encoding method.
 
@@ -65,7 +65,8 @@ def handle_client(client_socket, address):
 
         # send main menu options to the client
         client_socket.send(
-            " 1- Connect to group chat\n 2- Create a group chat\n 3- Exit the server\n".encode(ENCODING_METHOD))
+            "Hello client, please choose an option:\n 1 - Connect to group chat\n 2 - Create a group chat\n"
+            " 3 - Exit the server\n".encode(ENCODING_METHOD))
 
         while True:
             # This loop receives the option selected by the client
