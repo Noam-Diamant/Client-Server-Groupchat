@@ -5,7 +5,7 @@ import threading
 # Import the necessary modules.
 
 HOST_IP = '127.0.0.1'
-PORT = 7023
+PORT = 7026
 ENCODING_METHOD = 'utf-8'
 # Define constants for the server's host IP, port, and encoding method.
 
@@ -52,9 +52,15 @@ def active_client():
     # If the user has chosen option 1 or 2, continue with the connection.
     message_from_server = client_socket.recv(1024).decode(ENCODING_METHOD)
     print(message_from_server)
-    if '1' in option:  # the first option, connect to a chat
-        # If the user has chosen option 1, connect to an existing chat group.
+    # the first option, connect to a chat
+    # If the user has chosen option 1, connect to an existing chat group.
+    if '1' in option:
+        # If a client wants to connect to a chat
+        # but no chats are available, disconnect the client
+        if "no chats available" in message_from_server:
+            return
 
+        # If chats are available, continue with the client connection process
         client_name = input()
         client_socket.send(client_name.encode(ENCODING_METHOD))
         message_from_server = client_socket.recv(1024).decode(ENCODING_METHOD)
