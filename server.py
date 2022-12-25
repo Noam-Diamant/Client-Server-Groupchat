@@ -5,7 +5,7 @@ import time
 # Import the necessary modules.
 
 HOST_IP = '127.0.0.1'
-PORT = 7023
+PORT = 7026
 ENCODING_METHOD = 'utf-8'
 # Define constants for the server's host IP, port, and encoding method.
 
@@ -92,6 +92,16 @@ def handle_client(client_socket, address):
 
         # if the client selects option 1, request their name and desired group ID and password
         if '1' in option:
+            # If a client wants to connect to a chat
+            # but no chats are available, disconnect the client
+            if not groups:
+                client_socket.send("You have chosen to connect to a chat, but there are no chats available to connect "
+                                   "to. You are disconnected from the server, you can try to connect again later, "
+                                   "bye!".encode(ENCODING_METHOD))
+                print(f"client on address {address} has disconnected, because there are no chats available to connect.\n")
+                return
+
+            # If chats are available, continue with the client connection process
             client_socket.send("Please enter your name: ".encode(ENCODING_METHOD))
             name = client_socket.recv(1024).decode(ENCODING_METHOD)
 
@@ -99,8 +109,6 @@ def handle_client(client_socket, address):
             # loop until a valid group ID is received
             while True:
                 group_id = client_socket.recv(1024).decode(ENCODING_METHOD)
-                print(groups.keys())
-                print('groupid:' + group_id)
                 # if the group ID is not in the groups dictionary, send an error message and request the ID again
                 if group_id not in groups.keys():
                     client_socket.send("The ID you provided is invalid, please try again! ".encode(ENCODING_METHOD))
